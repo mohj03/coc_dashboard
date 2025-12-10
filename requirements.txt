@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+requests
+google-generativeai
+httpx==0.27.2
+python-dotenv

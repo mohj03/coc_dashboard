@@ -1,0 +1,6 @@
+.env
+dummys/
+venv/
+data/**
+!data/**/
+!data/**/.gitkeep
