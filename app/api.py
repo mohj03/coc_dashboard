@@ -8,47 +8,11 @@ import os, time
 from pathlib import Path
 import sqlite3
 import json
-
-
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # hvem får lov til å spørre API-et
-    allow_credentials=True,
-    allow_methods=["*"],   # tillat alle HTTP-metoder (GET, POST, osv.)
-    allow_headers=["*"],   # tillat alle headers
-)
-
 import threading
 from app.worker.updater import cw_loop
 from app.services.get_cw_data import data_from_monthly
 
-
-def ensure_col_and_backfill():
-    DB_PATH = "/home/ubuntu/uguwewe/data/sql_db/cw_history.db"
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-
-    # 1) sjekk om kolonnen finnes
-    c.execute("PRAGMA table_info(player_cwlog);")
-    cols = {row["name"] for row in c.fetchall()}
-
-    # velg et klart navn – f.eks. 'baseline_wars_attended'
-    if "possible_attacks" not in cols:
-        # 2) legg til kolonnen
-        c.execute("ALTER TABLE player_cwlog ADD COLUMN possible_attacks INTEGER NOT NULL DEFAULT 0;")
-
-        # 3) backfill med dagens wars_attended for alle rader
-        c.execute("""
-            UPDATE player_cwlog
-               SET possible_attacks = wars_attended * 2
-        """)
-
-        conn.commit()
-
-    conn.close()
+app = FastAPI()
 
 @app.on_event("startup")
 def start_worker():
