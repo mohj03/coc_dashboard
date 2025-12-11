@@ -23,7 +23,7 @@ def start_worker():
 
 def fetch_from_player(tag):
     player = {}
-    DB_PATH = "/home/ubuntu/uguwewe/data/sql_db/cw_history.db"
+    DB_PATH = "/home/magnus_hajohansen/coc_dashboard/data/sql_db/cw_history.db"
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
 
