@@ -1,14 +1,11 @@
 from pathlib import Path
-import os
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]   # /home/ubuntu/uguwewe
-DATA_DIR  = PROJECT_ROOT / "data"
-SQL_DIR   = DATA_DIR / "sql_db"
-STAMP_DIR = DATA_DIR / "stamps"
-CACHE_DIR = DATA_DIR / "cache_files"
+root_dir = Path("data")
 
-for d in (SQL_DIR, STAMP_DIR, CACHE_DIR):
-    d.mkdir(parents=True, exist_ok=True)
+#sql database
+db_dir = root_dir / "sql_db"
+cw_db_dir = db_dir / "cw_history.db"
+cwl_db_dir = db_dir / "cwl_history.db"
 
-DB_PATH    = Path(os.getenv("DB_PATH") or (SQL_DIR / "cw_history.db"))
-STAMP_FILE = STAMP_DIR / "CW_timestamp.txt"
+
+cache_dir = root_dir / "cache_files"
