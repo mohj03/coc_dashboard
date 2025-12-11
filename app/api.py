@@ -11,7 +11,7 @@ import json
 import threading
 from app.worker.updater import cw_loop
 from app.services.get_cw_data import data_from_monthly
-import app.paths
+import app.paths as paths
 
 app = FastAPI()
 
