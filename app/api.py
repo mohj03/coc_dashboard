@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.services.get_cw_data import fetch_from_monthly
 from app.services import backup
-from app.services import reset
 import os, time
 from pathlib import Path
 import sqlite3
