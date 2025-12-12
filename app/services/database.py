@@ -8,15 +8,10 @@ import calendar
 from pathlib import Path
 from pprint import pprint
 from app.services.live_cwl import LiveCWL
+from paths import DB, CACHE, STAMPS, root_dir
 
 lock = threading.Lock()
-
-BASE_DIR = Path(__file__).resolve().parents[2]  # peker på .../uguwewe
-DB_PATH = BASE_DIR / "data" / "sql_db" / "cw_history.db"
-
-DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-
-conn = sqlite3.connect(DB_PATH.as_posix(), check_same_thread=False)
+conn = sqlite3.connect(DB["cw"], check_same_thread=False)
 c = conn.cursor()
 
 c.execute(""" CREATE TABLE IF NOT EXISTS player_cwlog (
@@ -117,7 +112,7 @@ def save_warInfo(data, scale, save=False):
     
     with lock:
         try:
-            with open("data/stamps/war_counter.txt", "r") as f:
+            with open(STAMPS["war_counter"], "r") as f:
                 all_wars = int(f.read().strip())
                 max_points = round(((all_wars + 1) * 95 ), 1) #+1 fordi krigen legges på etter den har gått igjennom her
                 star_value = round(max_points / 3, 1)
@@ -328,7 +323,8 @@ def save_warInfo(data, scale, save=False):
             print(f"En feil oppstod under lagring til database: {e}")
 
             try:
-                with open(f"data/backup/{war_type}/{timestamp}.json", "w", encoding="utf-8") as f:
+                DIR = root_dir / "backup" / f"{war_type}" / f"{timestamp}.json"
+                with open(DIR, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=2, ensure_ascii=False)
 
                 print(f"backup lagret under data/backup/{war_type}/{timestamp}.json")
@@ -632,9 +628,8 @@ def print_():
         print(row)
     
 
-
 if __name__ == "__main__":
-    with open("data/cache_files/LIVE-war.json", "r", encoding="utf-8") as f:
+    with open(CACHE["live_war"], "r", encoding="utf-8") as f:
         data = json.load(f)
     #save_warInfo(data, 1.5)
     save_warInfo(data, 1, True)

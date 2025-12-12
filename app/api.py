@@ -11,7 +11,7 @@ import json
 import threading
 from app.worker.updater import cw_loop
 from app.services.get_cw_data import data_from_monthly
-from app.paths import DB, CACHE
+from app.paths import DB, CACHE, STAMPS
 
 app = FastAPI()
 
@@ -55,7 +55,7 @@ def fetch_from_player(tag):
     
     else:
 
-        with open("data/cache_files/clan_members.json", "r", encoding="utf-8") as f:
+        with open(CACHE["clan_members"], "r", encoding="utf-8") as f:
             data = json.load(f)
         
         player_ = data.get(tag, {})
@@ -95,7 +95,7 @@ def get_player(tag: str):
 @app.get("/clash/clan-members")
 def get_clan_members():
     try:
-        with open("data/cache_files/clan_members.json", "r", encoding="utf-8") as f:
+        with open(CACHE["clan_members"], "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
     except FileNotFoundError:
@@ -107,7 +107,7 @@ def get_clan_members():
 @app.get("/clash/live-monthly")
 def get_all_monthly():
     try:
-        with open("data/cache_files/all_monthly.json", "r", encoding="utf-8") as f:
+        with open(CACHE["all_monthly"], "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
     except FileNotFoundError:
@@ -119,7 +119,7 @@ def get_all_monthly():
 @app.get("/clash/live-cw")
 def get_LIVEcw():
     try:
-        with open("data/cache_files/LIVE-war.json", "r", encoding="utf-8") as f:
+        with open(CACHE["live_war"], "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
     except FileNotFoundError:
@@ -131,7 +131,7 @@ def get_LIVEcw():
 @app.get("/clash/log-cwl")
 def get_LOGcw():
     try:
-        with open("data/cache_files/LOGcw.json", "r", encoding="utf-8") as f:
+        with open(CACHE["logcw"], "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
     except FileNotFoundError:
@@ -146,7 +146,7 @@ def json_utf8(data):
 @app.get("/clash/mvp")
 def get_mvp():
     try:
-        with open("data/cache_files/mvp.json", "r", encoding="utf-8") as f:
+        with open(CACHE["mvp"], "r", encoding="utf-8") as f:
             data = json.load(f)
         return json_utf8(data)
     
@@ -159,7 +159,7 @@ def get_mvp():
 @app.get("/clash/rompis")
 def get_rompis():
     try:
-        with open("data/cache_files/rompis.json", "r", encoding="utf-8") as f:
+        with open(CACHE["rompis"], "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
     except FileNotFoundError:
@@ -171,7 +171,7 @@ def get_rompis():
 @app.get("/clash/top10-month")
 def get_top10_month():
     try:
-        with open("data/cache_files/top10_month.json", "r", encoding="utf-8") as f:
+        with open(CACHE["top10_month"], "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
     except FileNotFoundError:
@@ -183,7 +183,7 @@ def get_top10_month():
 @app.get("/clash/theme")
 def theme():
     try:
-        with open("data/cache_files/theme.json", "r", encoding="utf-8") as f:
+        with open(CACHE["theme"], "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
     except FileNotFoundError:
@@ -222,7 +222,7 @@ import httpx
 @app.get("/clash/wartag")
 def wartag():
     try:
-        with open("data/stamps/war_tags_cwl.json", "r", encoding="utf-8") as f:
+        with open(STAMPS["war_tags_cwl"], "r", encoding="utf-8") as f:
             data = json.load(f)
         return data
     except FileNotFoundError:

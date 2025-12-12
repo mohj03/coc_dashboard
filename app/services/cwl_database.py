@@ -6,15 +6,10 @@ import os
 from pathlib import Path
 from pprint import pprint
 import json
+from paths import DB, CACHE
 
 lock = threading.Lock()
-
-BASE_DIR = Path(__file__).resolve().parents[2]  # peker på .../uguwewe
-DB_PATH = BASE_DIR / "data" / "sql_db" / "cwl_history.db"
-
-DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-
-conn = sqlite3.connect(DB_PATH.as_posix(), check_same_thread=False)
+conn = sqlite3.connect(DB["cwl"], check_same_thread=False)
 c = conn.cursor()
 
 c.execute(""" CREATE TABLE IF NOT EXISTS player_cwlLog (
@@ -159,7 +154,7 @@ def print_cwl_log():
         print(row)
 
 if "__main__" == __name__:
-    with open("data/cache_files/LIVE-war.json", "r", encoding="utf-8") as f:
+    with open(CACHE["live_war"], "r", encoding="utf-8") as f:
         data = json.load(f)
     #save_cwlInfo(data)
     #reset_cwl()

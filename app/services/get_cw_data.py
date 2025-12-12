@@ -13,6 +13,7 @@ import google.generativeai as genai
 import calendar
 import random
 from pprint import pprint
+from paths import CACHE, STAMPS
 
 load_dotenv()
 tok = os.getenv("CLASH_TOKEN") or os.getenv("COC_TOKEN") or os.getenv("CLASH_API_KEY") or ""
@@ -48,7 +49,7 @@ def fetch_from_LIVEcw():
             _current_data = json.load(f)
 
         try:
-            with open("data/cache_files/LIVE-war.json", "r") as f:
+            with open(CACHE["live_war"], "r") as f:
                 data = json.load(f)
         
         except FileNotFoundError:
@@ -70,7 +71,7 @@ def fetch_from_LIVEcw():
             "warInfo": live_cw_data_["war_info"]
         }
 
-        with open("data/cache_files/LIVE-war.json", "w", encoding="utf-8") as f:
+        with open(CACHE["live_war"], "w", encoding="utf-8") as f:
             json.dump(live_cw_data_, f, indent=2, ensure_ascii=False)
     
 
@@ -95,7 +96,7 @@ def fetch_from_LOGcw():
         CWlog = CW_Log(warlog_data)
         log_cw_data = CWlog.to_JSON()
 
-        with open("data/cache_files/LOGcw.json", "w", encoding="utf-8") as f:
+        with open(CACHE["logcw"], "w", encoding="utf-8") as f:
             json.dump(log_cw_data, f, indent=2, ensure_ascii=False)
 
         print("LOGcw.json oppdatert vellykket")
@@ -117,7 +118,7 @@ def get_clan_mebers():
         warlog_data = response_members.json()
         clan_list = database.clan_list(warlog_data)
 
-        with open("data/cache_files/clan_members.json", "w",  encoding="utf-8") as f:
+        with open(CACHE["clan_members"], "w",  encoding="utf-8") as f:
             json.dump(clan_list, f, indent=2, ensure_ascii=False)
             
         return True
@@ -234,7 +235,7 @@ def get_wartag(tags):
                 war_tags.append(val)
                 break
         
-    with open("data/stamps/war_tags_cwl.json", "w") as f:
+    with open(STAMPS["war_tags_cwl"], "w") as f:
         json.dump(war_tags, f, indent=2)
 
     return war_tags
@@ -242,7 +243,7 @@ def get_wartag(tags):
 def get_cwl():
     war_data = None
     try:
-        with open("data/stamps/war_tags_cwl.json", "r") as f:
+        with open(STAMPS["war_tags_cwl"], "r") as f:
             wt = json.load(f)
 
     except FileNotFoundError:
@@ -305,7 +306,7 @@ def get_cwl():
         war_data = response.json()
         war_data["side"] = side
         try:
-            with open("data/stamps/war_counter.txt", "r") as f:
+            with open(STAMPS["war_counter"], "r") as f:
                 war_count = int(f.read().strip())
                 scale_points = round((war_count * 95) / 100, 1)
 
@@ -313,7 +314,7 @@ def get_cwl():
             scale_points = 1
 
         try:
-            with open("data/cache_files/LIVE-war.json", "r") as f:
+            with open(CACHE["live_war"], "r") as f:
                 data = json.load(f)
         
         except FileNotFoundError:
@@ -330,7 +331,7 @@ def get_cwl():
 
         cwl_data = raff.add_points()
 
-        with open("data/cache_files/LIVE-war.json", "w", encoding="utf-8") as f:
+        with open(CACHE["live_war"], "w", encoding="utf-8") as f:
             json.dump(cwl_data, f, indent=2, ensure_ascii=False)
 
         theme = {
@@ -355,7 +356,7 @@ def save_cwl(data):
 
 def fetch_from_LIVEmonthly(data):
     try:
-        with open("data/stamps/war_counter.txt", "r") as f:
+        with open(STAMPS["war_counter"], "r") as f:
                     war_count = int(f.read().strip())
                     scale_points = round((war_count * 95) / 100, 1)
 
@@ -370,7 +371,7 @@ def data_from_monthly():
 
 def fetch_from_monthly():
     data = database.monthly_cache()
-    with open("data/cache_files/all_monthly.json", "w", encoding="utf-8") as f:
+    with open(CACHE["all_monthly"], "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
 def save_mothly():
@@ -386,7 +387,7 @@ def worste_player_tag(data):
     loser_player = []
 
     try:
-        with open("data/stamps/war_counter.txt", "r") as f:
+        with open(STAMPS["war_counter"], "r") as f:
             all_wars = int(f.read().strip())
 
     except ValueError:
@@ -465,7 +466,7 @@ def fetch_from_top10(data):
 
             top10[tag] = player_info        
 
-        with open("data/cache_files/top10_month.json", "w", encoding="utf-8") as f:
+        with open(CACHE["top10_month"], "w", encoding="utf-8") as f:
             json.dump(top10, f, indent=2, ensure_ascii=False)
 
     print("top10 rangert")
@@ -536,7 +537,7 @@ def fetch_from_mvp(mvp):
         mvp_["comment"] = response.text
         mvp_["info"] = "(generert av gemini-2.5-flash API)"
 
-    with open("data/cache_files/mvp.json", "w", encoding="utf-8") as f:
+    with open(CACHE["mvp"], "w", encoding="utf-8") as f:
         json.dump(mvp_, f, indent=2, ensure_ascii=False)
 
     type_month = helpers.month(month)
@@ -618,7 +619,7 @@ def fetch_from_rompis(loser, cwl_rompis):
         loser_["comment"] = response.text
         loser_["info"] = "(generert av gemini-2.5-flash API)"
 
-    with open("data/cache_files/rompis.json", "w", encoding="utf-8") as f:
+    with open(CACHE["rompis"], "w", encoding="utf-8") as f:
         json.dump(loser_, f, indent=2, ensure_ascii=False)
 
     database.update_mvp_and_rompis(tag, award_type, type_month, response.text)

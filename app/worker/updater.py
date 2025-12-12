@@ -3,6 +3,7 @@ import time
 from datetime import datetime, timedelta, timezone
 from app.services import backup
 import json
+from paths import CACHE, STAMPS, BACKUP, DB
 
 def cw_loop():
     theme = {
@@ -27,11 +28,11 @@ def cw_loop():
                     get_cw_data.fetch_from_monthly()
                 
                 if state in ("preparation", "inWar"):
-                    with open("data/cache_files/theme.json", "w", encoding="utf-8") as f:
+                    with open(CACHE["theme"], "w", encoding="utf-8") as f:
                         json.dump(LOGcw_player_cache[1], f, indent=2, ensure_ascii=False)
 
                 else:
-                    with open("data/cache_files/theme.json", "w", encoding="utf-8") as f:
+                    with open(CACHE["theme"], "w", encoding="utf-8") as f:
                         json.dump(theme, f, indent=2, ensure_ascii=False)
 
                 if state == "preparation":
@@ -45,7 +46,7 @@ def cw_loop():
                     count = 60
 
                     try:
-                        with open("data/stamps/CW_timestamp.txt", "r") as f:
+                        with open(STAMPS["cw"], "r") as f:
                             timestamp = f.read().strip()
 
                     except FileNotFoundError:
@@ -75,7 +76,7 @@ def cw_loop():
                         get_cw_data.get_clan_mebers()
 
                         try:
-                            with open("data/stamps/war_counter.txt", "r") as f:
+                            with open(STAMPS["war_counter"], "r") as f:
                                 war_counter = int(f.read().strip())
 
                         except (FileNotFoundError, ValueError):
@@ -83,19 +84,19 @@ def cw_loop():
 
                         war_counter += 1
 
-                        with open("data/stamps/war_counter.txt", "w") as f:
+                        with open(STAMPS["war_counter"], "w") as f:
                             f.write(str(war_counter))
 
                         print("alt lagret")
 
-                        with open("data/stamps/CW_timestamp.txt", "w") as f:
+                        with open(STAMPS["cw"], "w") as f:
                             f.write(endtime)
                             
                         print("timestamp endret")
 
             elif today < 12:
                 try:
-                    with open("data/stamps/CWL_seasonstamp.txt", "r") as f:
+                    with open(STAMPS["cwl_season"], "r") as f:
                         seasonstamp = f.read()
 
                 except FileNotFoundError:
@@ -107,7 +108,7 @@ def cw_loop():
                     season = get_cw_data.cwl_check()
                     if not season:
 
-                        with open("data/cache_files/theme.json", "w", encoding="utf-8") as f:
+                        with open(CACHE["theme"], "w", encoding="utf-8") as f:
                             json.dump(theme, f, indent=2, ensure_ascii=False)
 
                     if today == 4 and not season:
@@ -121,7 +122,7 @@ def cw_loop():
                             get_cw_data.reset_cwl()
                             get_cw_data.save_mothly()
 
-                            with open("data/stamps/war_counter.txt", "w") as f:
+                            with open(STAMPS["war_counter"], "w") as f:
                                 f.write(str(0))
 
                             future = datetime.now(timezone.utc) + timedelta(days=2)
@@ -133,19 +134,19 @@ def cw_loop():
                                 }
                             }
 
-                            with open("data/cache_files/theme.json", "w", encoding="utf-8") as f:
+                            with open(CACHE["theme"], "w", encoding="utf-8") as f:
                                 json.dump(theme_, f, indent=2, ensure_ascii=False)
 
                             print("alt lagret, ingen krig!")
                             count = 5
 
-                            with open("data/stamps/CWL_seasonstamp.txt", "w") as f:
+                            with open(STAMPS["cwl_season"], "w") as f:
                                 f.write(f"noWar, {month}")
 
                     if season:
                         count = 5
                         
-                        with open("data/stamps/CWL_seasonstamp.txt", "w") as f:
+                        with open(STAMPS["cwl_season"], "w") as f:
                             f.write("inWar")
 
                         LOGcwl_player_cache = get_cw_data.get_cwl()
@@ -159,7 +160,7 @@ def cw_loop():
 
                         if LOGcwl_player_cache[2]:
 
-                            with open("data/cache_files/theme.json", "w", encoding="utf-8") as f:
+                            with open(CACHE["theme"], "w", encoding="utf-8") as f:
                                 json.dump(LOGcwl_player_cache[1], f, indent=2, ensure_ascii=False)
 
                         get_cw_data.fetch_from_monthly()
@@ -168,7 +169,7 @@ def cw_loop():
                         endtime = LOGcwl_player_cache[0]["war_info"]["endTime"] 
 
                         try:
-                            with open("data/stamps/CWL_timestamp.txt", "r") as f:
+                            with open(STAMPS["cwl"], "r") as f:
                                 cwl_timestamp = f.read().strip()
 
                         except FileNotFoundError:
@@ -185,10 +186,10 @@ def cw_loop():
                             else:
 
                                 try:
-                                    with open("data/stamps/war_counter.txt", "r") as f:
+                                    with open(STAMPS["war_counter"], "r") as f:
                                         war_counter = int(f.read().strip())
 
-                                    with open("data/stamps/war_counter.txt", "w") as f:
+                                    with open(STAMPS["war_counter"], "w") as f:
                                         f.write(str(war_counter + 7))
 
                                 except (FileNotFoundError, ValueError):
@@ -217,25 +218,25 @@ def cw_loop():
                                 }
 
 
-                                with open("data/cache_files/theme.json", "w", encoding="utf-8") as f:
+                                with open(CACHE["theme"], "w", encoding="utf-8") as f:
                                     json.dump(theme_, f, indent=2, ensure_ascii=False)
 
-                                with open("data/stamps/CWL_seasonstamp.txt", "w") as f:
+                                with open(STAMPS["cwl_season"], "w") as f:
                                     f.write(f"ended, {season[0]}")
                 
-                                with open("data/stamps/war_counter.txt", "w") as f:
+                                with open(STAMPS["war_counter"], "w") as f:
                                     f.write(str(0))
 
                                 print("sesongen over, alt lagret riktig...")
 
                     else:
-                        with open("data/stamps/war_tags_cwl.json", "w") as f:
+                        with open(STAMPS["war_tags_cwl"], "w") as f:
                             json.dump([], f)
 
             else:
                 
                 print("ingen krig!")
-                with open("data/cache_files/theme.json", "w", encoding="utf-8") as f:
+                with open(CACHE["theme"], "w", encoding="utf-8") as f:
                     json.dump(theme, f, indent=2, ensure_ascii=False)
 
                 get_cw_data.get_clan_mebers()
@@ -257,10 +258,10 @@ def save_cwl(data, endtime):
     top10_monthly_data = get_cw_data.data_from_monthly()
     top10_monthly = get_cw_data.fetch_from_top10(top10_monthly_data)
 
-    backup.backup_database("/home/ubuntu/uguwewe/data/sql_db/cw_history.db", endtime=endtime)
+    backup.backup_database(DB["cw"], endtime=endtime)
     backup.rotate_backups()
 
-    with open("data/stamps/CWL_timestamp.txt", "w") as f:
+    with open(STAMPS["cwl"], "w") as f:
         f.write(endtime)
 
     print("FERDIG")

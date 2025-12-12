@@ -3,15 +3,14 @@ import os
 import shutil
 import glob
 from datetime import datetime
+from paths import SQL_BACKUP
 
 def backup_database(db_path: str, endtime: str):
-    # Lag backup-mappe per war type
-    backup_dir = f"data/sql_backup"
-    os.makedirs(backup_dir, exist_ok=True)
+    os.makedirs(SQL_BACKUP, exist_ok=True)
 
     # Bruk endtime som filnavn
     timestamp = endtime.replace(":", "-").replace("T", "_")
-    backup_file = f"{backup_dir}/{timestamp}.db"
+    backup_file = f"{SQL_BACKUP}/{timestamp}.db"
 
     # Lag trygg kopi med SQLite-backup API
     with sqlite3.connect(db_path) as src, sqlite3.connect(backup_file) as dst:
