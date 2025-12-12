@@ -67,7 +67,7 @@ def cw_loop():
                         get_cw_data.fetch_from_top10(top10_monthly_data)
 
                         try:
-                            backup.backup_database("/home/ubuntu/uguwewe/data/sql_db/cw_history.db", endtime=endtime)
+                            backup.backup_database(DB["cw"], endtime=endtime)
                             backup.rotate_backups()
 
                         except Exception as e:

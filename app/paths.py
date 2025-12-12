@@ -49,3 +49,5 @@ STAMPS = {
     "war_counter": stamps_dir / "war_counter.txt",
     "war_tags_cwl": stamps_dir / "war_tags_cwl.json",
 }
+
+print(STAMPS["war_counter"], CACHE["live_war"], root_dir)
