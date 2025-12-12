@@ -11,7 +11,7 @@ import json
 import threading
 from app.worker.updater import cw_loop
 from app.services.get_cw_data import data_from_monthly
-import app.paths as paths
+from app.paths import DB, CACHE
 
 app = FastAPI()
 
@@ -24,7 +24,7 @@ def start_worker():
 
 def fetch_from_player(tag):
     player = {}
-    DB_PATH = paths.cw_db_dir
+    DB_PATH = DB["cw"]
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
 

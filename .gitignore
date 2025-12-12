@@ -1,6 +1,6 @@
 .env
 dummys/
-commands.txt/
+commands/
 venv/
 data/**
 !data/**/
