@@ -3,7 +3,7 @@ import os
 import shutil
 import glob
 from datetime import datetime
-from paths import SQL_BACKUP
+from app.paths import SQL_BACKUP
 
 def backup_database(db_path: str, endtime: str):
     os.makedirs(SQL_BACKUP, exist_ok=True)

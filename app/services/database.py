@@ -8,7 +8,7 @@ import calendar
 from pathlib import Path
 from pprint import pprint
 from app.services.live_cwl import LiveCWL
-from paths import DB, CACHE, STAMPS, root_dir
+from app.paths import DB, CACHE, STAMPS, root_dir
 
 lock = threading.Lock()
 conn = sqlite3.connect(DB["cw"], check_same_thread=False)

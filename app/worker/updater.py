@@ -3,7 +3,7 @@ import time
 from datetime import datetime, timedelta, timezone
 from app.services import backup
 import json
-from paths import CACHE, STAMPS, BACKUP, DB
+from app.paths import CACHE, STAMPS, BACKUP, DB
 
 def cw_loop():
     theme = {

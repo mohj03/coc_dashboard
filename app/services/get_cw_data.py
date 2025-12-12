@@ -13,7 +13,7 @@ import google.generativeai as genai
 import calendar
 import random
 from pprint import pprint
-from paths import CACHE, STAMPS
+from app.paths import CACHE, STAMPS
 
 load_dotenv()
 tok = os.getenv("CLASH_TOKEN") or os.getenv("COC_TOKEN") or os.getenv("CLASH_API_KEY") or ""

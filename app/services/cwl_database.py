@@ -6,7 +6,7 @@ import os
 from pathlib import Path
 from pprint import pprint
 import json
-from paths import DB, CACHE
+from app.paths import DB, CACHE
 
 lock = threading.Lock()
 conn = sqlite3.connect(DB["cwl"], check_same_thread=False)
