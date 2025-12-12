@@ -14,21 +14,25 @@ lock = threading.Lock()
 conn = sqlite3.connect(DB["cw"], check_same_thread=False)
 c = conn.cursor()
 
-c.execute(""" CREATE TABLE IF NOT EXISTS player_cwlog (
-          tag TEXT PRIMARY KEY,
-          name TEXT,
-          th INTEGER,
-          sum_stars INTEGER DEFAULT 0,
-          star_points REAL DEFAULT 0.0,
-          avrg_stars REAL DEFAULT 0.0,
-          avrg_attacks_used REAL DEFAULT 0.0,
-          sum_attacks_used INTEGER DEFAULT 0,
-          sum_points REAL DEFAULT 0.0,
-          wars_attended INTEGER DEFAULT 0,
-          rating INTEGER DEFAULT 0,
-          new INTEGER DEFAULT 1
-          )
-          """)
+c.execute("""CREATE TABLE IF NOT EXISTS player_cwlog (
+    tag TEXT PRIMARY KEY,
+    name TEXT,
+    th INTEGER,
+
+    sum_stars INTEGER DEFAULT 0,
+    star_points REAL DEFAULT 0.0,
+    avrg_stars REAL DEFAULT 0.0,
+    avrg_attacks_used REAL DEFAULT 0.0,
+
+    sum_attacks_used INTEGER DEFAULT 0,
+    possible_attacks INTEGER DEFAULT 0,
+
+    sum_points REAL DEFAULT 0.0,
+    wars_attended INTEGER DEFAULT 0,
+    rating INTEGER DEFAULT 0,
+    new INTEGER DEFAULT 1
+    )
+    """)
 
 c.execute("""CREATE TABLE IF NOT EXISTS player_motnhly_awards (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -74,21 +78,34 @@ c.execute(""" CREATE TABLE IF NOT EXISTS clan (
           """)
 
 c.execute(""" CREATE TABLE IF NOT EXISTS monthly (
-          tag TEXT PRIMARY KEY,
-          name TEXT,
-          monthly_points REAL DEFAULT 0.0,
-          monthly_bonus REAL DEFAULT 0.0,
-          final_monthly_points REAL DEFAULT 0.0,
-          precent TEXT,
-          monthly_possible_bonus REAL DEFAULT 0.0,
-          monthly_max_points REAL DEFAULT 0.0,
-          monthly_attacks_used INTEGER DEFAULT 0,
-          monthly_possible_wars INTEGER DEFAULT 0,
-          monthly_possible_attacks INTEGER DEFAULT 0,
-          monthly_stars INTEGER DEFAULT 0,
-          rating INTEGER DEFAULT 0
-          )
-          """)
+    tag TEXT PRIMARY KEY,
+    name TEXT,
+
+    monthly_points REAL DEFAULT 0.0,
+    monthly_bonus REAL DEFAULT 0.0,
+    final_monthly_points REAL DEFAULT 0.0,
+    precent TEXT,
+
+    monthly_possible_bonus REAL DEFAULT 0.0,
+    monthly_max_points REAL DEFAULT 0.0,
+
+    monthly_attacks_used INTEGER DEFAULT 0,
+    monthly_possible_wars INTEGER DEFAULT 0,
+    monthly_possible_attacks INTEGER DEFAULT 0,
+
+    monthly_stars INTEGER DEFAULT 0,
+    cw_stars INTEGER DEFAULT 0,
+    cwl_stars INTEGER DEFAULT 0,
+
+    star_points INTEGER DEFAULT 0,
+
+    ranked_stars INTEGER DEFAULT 0,
+    ranked_cwl_stars INTEGER DEFAULT 0,
+
+    rating INTEGER DEFAULT 0
+    )
+    """
+        )
 
 c.execute("""CREATE TABLE IF NOT EXISTS monthly_log (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
