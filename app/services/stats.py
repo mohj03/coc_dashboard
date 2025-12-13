@@ -70,16 +70,18 @@ class PlayerStat():
         return round(self.avrg_stars, 1), round(self.avrg_attacks_used, 1)
 
     def _rating_(self):
-        if self.th == 17:
+        if self.th == 18:
             self.th_base = 88
-        elif self.th == 16:
+        elif self.th == 17:
             self.th_base = 84
+        elif self.th == 16:
+            self.th_base = 82
         elif self.th == 15:
             self.th_base = 79
         elif self.th == 14:
             self.th_base = 74
         else:
-            self.th_base = (self.th / 17) * 91
+            self.th_base = (self.th / 18) * 91
 
         if self.sum_points > 5000:
             self.points_base = 3

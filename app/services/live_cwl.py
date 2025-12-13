@@ -144,13 +144,17 @@ class LiveCWL():
                 else:
                     self.th_points = min((self.avg_def_th / self.townhall) ** 1.2, 1)
 
-                if self.townhall == 17 or super_attack == 17:
+                if self.townhall == 18 or super_attack == 18:
                     unfiltered_points = self.normal_stars * self.th_points
                     self.points = unfiltered_points + bonus
 
-                elif self.townhall == 16 or super_attack == 16:
+                elif self.townhall == 17 or super_attack == 17:
                     unfiltered_points = self.normal_stars * self.th_points
                     self.points = (unfiltered_points + bonus) * 0.95
+
+                elif self.townhall == 16 or super_attack == 16:
+                    unfiltered_points = self.normal_stars * self.th_points
+                    self.points = (unfiltered_points + bonus) * 0.93
                 
                 elif self.townhall == 15 or super_attack == 15:
                     unfiltered_points = self.normal_stars * self.th_points

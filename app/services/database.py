@@ -565,16 +565,18 @@ def clan_list(data):
             rating, th, sum_stars = row
 
         else:
-            if townhall == 17:
+            if townhall == 18:
                 rating = 80
+            elif townhall == 17:
+                rating = 77
             elif townhall == 16:
-                rating = 76
+                rating = 74
             elif townhall == 15:
                 rating = 71
             elif townhall == 14:
                 rating = 66
             else:
-                rating = int(round(((townhall / 17) * 91) - 8))
+                rating = int(round(((townhall / 18) * 91) - 8))
             
             th, sum_stars = townhall, 0
 

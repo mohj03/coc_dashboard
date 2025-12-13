@@ -120,20 +120,25 @@ class LiveCW():
                 else:
                     self.th_points = min((self.avg_def_th / self.townhall) ** 2, 1)
 
-                if self.townhall == 17:
+                if self.townhall == 18:
                         unfiltered_points = self.normal_stars * self.th_points
                         self.points = unfiltered_points * 0.95
                         th_pen = 0
 
-                elif self.townhall == 16:
+                elif self.townhall == 17:
                     unfiltered_points = self.normal_stars * self.th_points
                     self.points = unfiltered_points * 0.93
-                    th_pen = 0.05
+                    th_pen = 0.04
+
+                elif self.townhall == 16:
+                    unfiltered_points = self.normal_stars * self.th_points
+                    self.points = unfiltered_points * 0.90
+                    th_pen = 0.07
                 
             
                 elif self.townhall == 15:
                         unfiltered_points = self.normal_stars * self.th_points
-                        self.points = unfiltered_points * 0.9
+                        self.points = unfiltered_points * 0.865
                         th_pen = 0.1
                     
                 elif self.townhall == 14:
