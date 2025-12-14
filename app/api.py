@@ -35,14 +35,14 @@ def fetch_from_player(tag):
 
     if row:
         p = row
-        avrg_points = round(p[8] / p[11], 1)
+        avrg_points = round(p[8] / p[9], 1)
         precent_attacks = round(p[7] / p[11], 2)
         player[tag] = {
                    "name": p[1],
                     "townhall": p[2],
                     "sum_stars": p[3],
                     "avrg_stars": p[5],
-                    "avrg_attacks_used": p[6],
+                    "avrg_attacks_used": p[6] * 100,
                     "sum_attacks_used": p[7],
                     "sum_points": p[8],
                     "wars_attended": p[9],

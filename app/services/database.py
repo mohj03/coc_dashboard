@@ -193,16 +193,17 @@ def save_warInfo(data, scale, save=False):
                             th = excluded.th,
                             sum_stars = player_cwlog.sum_stars + excluded.sum_stars,
                             star_points = ROUND(excluded.star_points, 1),
-                            avrg_stars = ROUND(1.0 * (player_cwlog.sum_stars + excluded.sum_stars) / NULLIF((player_cwlog.sum_attacks_used + excluded.sum_attacks_used), 0), 1),
-                            avrg_attacks_used = ROUND(1.0 * (player_cwlog.sum_attacks_used + excluded.sum_attacks_used) / NULLIF(player_cwlog.possible_attacks + excluded.possible_attacks, 0), 1),
+                            avrg_stars = ROUND(1.0 * (player_cwlog.sum_stars + excluded.sum_stars) / 
+                            NULLIF(((player_cwlog.sum_attacks_used + excluded.sum_attacks_used) * 3), 0), 1),
+                            avrg_attacks_used = ROUND(1.0 * (player_cwlog.sum_attacks_used + excluded.sum_attacks_used) / NULLIF(player_cwlog.possible_attacks + excluded.possible_attacks, 0), 2),
                             sum_attacks_used = player_cwlog.sum_attacks_used + excluded.sum_attacks_used,
                             sum_points = ROUND(player_cwlog.sum_points + excluded.sum_points, 1),
-                            wars_attended = player_cwlog.wars_attended + excluded.wars_attended,
+                            wars_attended = player_cwlog.wars_attended + 1,
                             rating = excluded.rating,
                             possible_attacks = player_cwlog.possible_attacks + excluded.possible_attacks
                             """, 
                                     (tag, name, th ,stars , star_points, 1.0, 1.0, attack_used, points,
-                                        wars_attended, rating, possible_attacks_this_war)
+                                        1.0, rating, possible_attacks_this_war)
                                 )
                 
                     if war_type == "cwl":
