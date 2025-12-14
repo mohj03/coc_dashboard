@@ -202,7 +202,7 @@ def save_warInfo(data, scale, save=False):
                             rating = excluded.rating,
                             possible_attacks = player_cwlog.possible_attacks + excluded.possible_attacks
                             """, 
-                                    (tag, name, th ,stars , star_points, 1.0, 1.0, attack_used, points,
+                                    (tag, name, th ,stars , star_points, star_points, 1.0, attack_used, points,
                                         1.0, rating, possible_attacks_this_war)
                                 )
                 
