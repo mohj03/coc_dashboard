@@ -42,7 +42,7 @@ def fetch_from_player(tag):
                     "townhall": p[2],
                     "sum_stars": p[3],
                     "avrg_stars": p[5],
-                    "avrg_attacks_used": p[6] * 100,
+                    "avrg_attacks_used": int(p[6] * 100),
                     "sum_attacks_used": p[7],
                     "sum_points": p[8],
                     "wars_attended": p[9],
