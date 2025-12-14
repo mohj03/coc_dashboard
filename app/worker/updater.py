@@ -57,14 +57,18 @@ def cw_loop():
 
                         count = 60
 
-                        get_cw_data.fetch_from_LIVEmonthly(LOGcw_player_cache[0])
-                        get_cw_data.fetch_from_monthly()
+                        try:
+                            get_cw_data.fetch_from_LIVEmonthly(LOGcw_player_cache[0])
+                            get_cw_data.fetch_from_monthly()
 
-                        LOGcw_clan_cache = get_cw_data.fetch_from_LOGcw()
-                        get_cw_data.save_LOGcw(LOGcw_clan_cache)
+                            LOGcw_clan_cache = get_cw_data.fetch_from_LOGcw()
+                            get_cw_data.save_LOGcw(LOGcw_clan_cache)
 
-                        top10_monthly_data = get_cw_data.data_from_monthly()
-                        get_cw_data.fetch_from_top10(top10_monthly_data)
+                            top10_monthly_data = get_cw_data.data_from_monthly()
+                            get_cw_data.fetch_from_top10(top10_monthly_data)
+                        
+                        except Exception as e:
+                            print(f"feil oppstå, greide ikke å lagre krig: {e}")
 
                         try:
                             backup.backup_database(DB["cw"], endtime=endtime)
@@ -265,6 +269,17 @@ def save_cwl(data, endtime):
         f.write(endtime)
 
     print("FERDIG")
+
+def backup_insert(root):
+    with open(root, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    get_cw_data.fetch_from_LIVEmonthly(data)
+    get_cw_data.fetch_from_monthly()
+
+    top10_monthly_data = get_cw_data.data_from_monthly()
+    get_cw_data.fetch_from_top10(top10_monthly_data)
+
 
 
 if __name__ == "__main__":

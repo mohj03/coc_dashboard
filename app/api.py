@@ -8,14 +8,16 @@ from pathlib import Path
 import sqlite3
 import json
 import threading
-from app.worker.updater import cw_loop
+from app.worker.updater import cw_loop, backup_insert
 from app.services.get_cw_data import data_from_monthly
-from app.paths import DB, CACHE, STAMPS
+from app.paths import DB, CACHE, STAMPS, BACKUP
 
 app = FastAPI()
-
 @app.on_event("startup")
 def start_worker():
+    
+    backup_root = BACKUP["cw"] / "20251214T105113.000Z.json"
+    backup_insert(backup_root)
 
     t = threading.Thread(target=cw_loop, daemon=True)
     t.start()
