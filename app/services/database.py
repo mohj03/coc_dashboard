@@ -26,7 +26,7 @@ c.execute("""CREATE TABLE IF NOT EXISTS player_cwlog (
     sum_points REAL DEFAULT 0.0,
     wars_attended INTEGER DEFAULT 0,
     rating INTEGER DEFAULT 0,
-    possible_attacks INTEGER DEFAULT 0,
+    possible_attacks INTEGER DEFAULT 0
     )
     """)
 
