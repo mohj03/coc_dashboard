@@ -18,19 +18,15 @@ c.execute("""CREATE TABLE IF NOT EXISTS player_cwlog (
     tag TEXT PRIMARY KEY,
     name TEXT,
     th INTEGER,
-
     sum_stars INTEGER DEFAULT 0,
     star_points REAL DEFAULT 0.0,
     avrg_stars REAL DEFAULT 0.0,
     avrg_attacks_used REAL DEFAULT 0.0,
-
     sum_attacks_used INTEGER DEFAULT 0,
-    possible_attacks INTEGER DEFAULT 0,
-
     sum_points REAL DEFAULT 0.0,
     wars_attended INTEGER DEFAULT 0,
     rating INTEGER DEFAULT 0,
-    new INTEGER DEFAULT 1
+    possible_attacks INTEGER DEFAULT 0,
     )
     """)
 
@@ -185,35 +181,28 @@ def save_warInfo(data, scale, save=False):
 
                     #VodkaRedbull - bonus
                     
-
-                    calc = stats.PlayerStat(tag, th, attack_used, stars, star_points, points, max_points, mulig_bonus, war_type, c)
-                    avrg_stars, avrg_attacks_used, rating, sum_points, new = (calc.tuple())
-
-                    sum_points_ = round(sum_points,1)
-                    avrg_stars_ = round(avrg_stars, 1)
-                    avrg_attacks_used_ = round(avrg_attacks_used, 1)
+                    rating = 50
 
                     c.execute(
                         """
                             INSERT INTO player_cwlog (tag, name, th, sum_stars, star_points, avrg_stars, avrg_attacks_used, sum_attacks_used,
-                            sum_points, wars_attended, rating, new, possible_attacks)
-                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            sum_points, wars_attended, rating, possible_attacks)
+                            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                             ON CONFLICT(tag) DO UPDATE SET
                             name = excluded.name,
                             th = excluded.th,
                             sum_stars = player_cwlog.sum_stars + excluded.sum_stars,
-                            star_points = excluded.star_points,
-                            avrg_stars = excluded.avrg_stars,
-                            avrg_attacks_used = excluded.avrg_attacks_used,
+                            star_points = ROUND(excluded.star_points, 1),
+                            avrg_stars = ROUND(1.0 * (player_cwlog.sum_stars + excluded.sum_stars) / NULLIF((player_cwlog.sum_attacks_used + excluded.sum_attacks_used), 0), 1),
+                            avrg_attacks_used = ROUND(1.0 * (player_cwlog.sum_attacks_used + excluded.sum_attacks_used) / NULLIF(player_cwlog.possible_attacks + excluded.possible_attacks, 0), 1),
                             sum_attacks_used = player_cwlog.sum_attacks_used + excluded.sum_attacks_used,
-                            sum_points = excluded.sum_points,
+                            sum_points = ROUND(player_cwlog.sum_points + excluded.sum_points, 1),
                             wars_attended = player_cwlog.wars_attended + excluded.wars_attended,
                             rating = excluded.rating,
-                            new = excluded.new,
                             possible_attacks = player_cwlog.possible_attacks + excluded.possible_attacks
                             """, 
-                                    (tag, name, th ,stars , star_points, avrg_stars_, avrg_attacks_used_, attack_used, sum_points_,
-                                        wars_attended, rating, new, possible_attacks_this_war)
+                                    (tag, name, th ,stars , star_points, 1.0, 1.0, attack_used, points,
+                                        wars_attended, rating, possible_attacks_this_war)
                                 )
                 
                     if war_type == "cwl":

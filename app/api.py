@@ -15,7 +15,7 @@ from app.paths import DB, CACHE, STAMPS, BACKUP
 app = FastAPI()
 @app.on_event("startup")
 def start_worker():
-    
+
     backup_root = BACKUP["cw"] / "20251214T105113.000Z.json"
     backup_insert(backup_root)
 
@@ -35,8 +35,8 @@ def fetch_from_player(tag):
 
     if row:
         p = row
-        avrg_points = round(p[8] / p[9], 1)
-        precent_attacks = round(p[7] / p[12], 2)
+        avrg_points = round(p[8] / p[11], 1)
+        precent_attacks = round(p[7] / p[11], 2)
         player[tag] = {
                    "name": p[1],
                     "townhall": p[2],
@@ -44,10 +44,10 @@ def fetch_from_player(tag):
                     "avrg_stars": p[5],
                     "avrg_attacks_used": p[6],
                     "sum_attacks_used": p[7],
-                    "sum_points": round(p[8], 1),
+                    "sum_points": p[8],
                     "wars_attended": p[9],
                     "player_rating": p[10],
-                    "possible_attacks": p[12],
+                    "possible_attacks": p[11],
                     "avrg_points": avrg_points,
                     "precent_attacks": precent_attacks * 100
                     }
