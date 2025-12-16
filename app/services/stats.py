@@ -113,7 +113,6 @@ class PlayerStat():
             self.star_base = -3
         else:
             self.star_base = -5
-
         self.rating = int(self.th_base + self.points_base + self.war_base + self.star_base)
 
         return self.rating

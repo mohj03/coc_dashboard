@@ -17,7 +17,7 @@ app = FastAPI()
 def start_worker():
 
     backup_root = BACKUP["cw"] / "20251214T105113.000Z.json"
-    backup_insert(backup_root)
+    #backup_insert(backup_root)
 
     t = threading.Thread(target=cw_loop, daemon=True)
     t.start()
@@ -92,6 +92,35 @@ def get_stars():
 def get_player(tag: str):
     norm_tag = f"#{tag.upper()}"
     return fetch_from_player(norm_tag)
+
+@app.get("/clash/war-prediction")
+def predictions():
+    with open(CACHE["live_war"], "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    star_mean = []
+    for tag in data:
+        if tag == "war_info":
+            continue
+
+        player = fetch_from_player(tag)
+        avrg_stars = player["avrg_stars"]
+
+        if avrg_stars == None:
+            avrg_stars = 2.0
+
+        star_mean.append(avrg_stars)
+    
+    if not star_mean:
+        return None
+
+    prediction = sum(star_mean)
+
+    if data["war_info"]["warType"] == "cw":
+        prediction *= 2
+    
+    return prediction
+
 
 @app.get("/clash/clan-members")
 def get_clan_members():
