@@ -115,9 +115,6 @@ def predictions():
         return None
 
     prediction = sum(star_mean)
-
-    if data["war_info"]["warType"] == "cw":
-        prediction *= 2
     
     return prediction
 
