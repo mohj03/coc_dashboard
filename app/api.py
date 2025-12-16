@@ -104,7 +104,7 @@ def predictions():
             continue
 
         player = fetch_from_player(tag)
-        avrg_stars = player[tag]["avrg_stars"]
+        avrg_stars = player["avrg_stars"]
 
         if avrg_stars == None:
             avrg_stars = 2.0
