@@ -65,9 +65,6 @@ def fetch_from_LIVEcw():
         ongoing = LiveCW(current_data, akk_points)
         live_cw_data_ = ongoing.add_points()
 
-        with open("dummys/live-war-dummy.json", "w") as f:
-            json.dump(current_data, f, indent=2, ensure_ascii=False)
-
         theme = {
             "theme": "clanwar",
             "warInfo": live_cw_data_["war_info"]
