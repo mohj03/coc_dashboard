@@ -16,7 +16,7 @@ app = FastAPI()
 @app.on_event("startup")
 def start_worker():
 
-    backup_root = BACKUP["cw"] / "20251214T105113.000Z.json"
+    backup_root = BACKUP["cw"] / "20251015T183827.000Z.json"
     #backup_insert(backup_root)
 
     t = threading.Thread(target=cw_loop, daemon=True)
@@ -116,7 +116,7 @@ def predictions():
 
     prediction = sum(star_mean)
     
-    return prediction
+    return f"{prediction} - {prediction + 3}"
 
 
 @app.get("/clash/clan-members")

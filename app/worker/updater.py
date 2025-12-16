@@ -10,7 +10,6 @@ def cw_loop():
         "theme": "noWar",
         "warInfo": None
     }
-
     while True:
 
         count = 60
@@ -274,7 +273,7 @@ def backup_insert(root):
     with open(root, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    get_cw_data.fetch_from_LIVEmonthly(data)
+    get_cw_data.fetch_from_LIVEmonthly(data, True)
     get_cw_data.fetch_from_monthly()
 
     top10_monthly_data = get_cw_data.data_from_monthly()

@@ -48,6 +48,7 @@ c.execute("""CREATE TABLE IF NOT EXISTS player_war_log (
         stars INTEGER DEFAULT 0,
         unfiltered_points REAL DEFAULT 0.0,
         destruction_percent REAL DEFAULT 0.0,
+        opponent_avrg_th REAL DEFAULT 0.0,
         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )
          """)
@@ -157,6 +158,16 @@ def save_warInfo(data, scale, save=False):
                         star_points = 0
                         max_points = 0
                         mulig_bonus = 0
+
+                    opp_th = 0.0
+                    avrg_opp_th = 0.0
+                    if player["attacks"]:
+                        for opp in player["attacks"]:
+                            opp_th += opp["defenderTownhall"]
+                            
+                        avrg_opp_th = opp_th / len(player["attacks"])
+                    
+                    
 
                     name = player["name"]
                     th = player["townhallLevel"]
@@ -311,8 +322,8 @@ def save_warInfo(data, scale, save=False):
 
                     c.execute("""
                         INSERT INTO player_war_log 
-                            (player_tag, th_level, attack_used, stars, unfiltered_points, destruction_percent)
-                        VALUES (?, ?, ?, ?, ?, ?)
+                            (player_tag, th_level, attack_used, stars, unfiltered_points, destruction_percent, opponent_avrg_th)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
                     """, (
                         tag,
                         th,
@@ -320,6 +331,7 @@ def save_warInfo(data, scale, save=False):
                         stars,
                         unfiltered_points,
                         total_destruction,
+                        avrg_opp_th,
                     ))
             
             conn.commit()
@@ -334,7 +346,7 @@ def save_warInfo(data, scale, save=False):
                 with open(DIR, "w", encoding="utf-8") as f:
                     json.dump(data, f, indent=2, ensure_ascii=False)
 
-                print(f"backup lagret under data/backup/{war_type}/{timestamp}.json")
+                print(f"backup lagret under data / backup / {war_type} / {timestamp}.json")
 
             except Exception as e:
                 print(f"kunne ikke lagre backup: {e}")

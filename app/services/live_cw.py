@@ -23,6 +23,10 @@ class LiveCW():
         clan_members = self.data["clan"]["members"]
         opponent_members = self.data["opponent"]["members"]
 
+        th_list = []
+        for member in opponent_members:
+             th_list.append(member["townhallLevel"])
+
         result = {}
         result["war_info"] = {"endTime": self.endTime,
                             "warType": "cw",
@@ -40,8 +44,10 @@ class LiveCW():
                             "maxPoints": 100,
                             "scale": 1,
                             "war_count": self.war_count,
+                            "opponentTownhallLevel": th_list,
                             "maxPoints_info": "maks er 100 poeng - bonus"
                             }
+             
         
         for member in clan_members:
             tag = member["tag"]

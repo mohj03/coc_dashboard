@@ -65,6 +65,8 @@ def fetch_from_LIVEcw():
         ongoing = LiveCW(current_data, akk_points)
         live_cw_data_ = ongoing.add_points()
 
+        with open("dummys/live-war-dummy.json", "w") as f:
+            json.dump(current_data, f, indent=2, ensure_ascii=False)
 
         theme = {
             "theme": "clanwar",
@@ -354,7 +356,7 @@ def reset_cwl():
 def save_cwl(data):
     cwl_database.save_cwlInfo(data)
 
-def fetch_from_LIVEmonthly(data):
+def fetch_from_LIVEmonthly(data, save=False):
     try:
         with open(STAMPS["war_counter"], "r") as f:
                     war_count = int(f.read().strip())
@@ -364,7 +366,7 @@ def fetch_from_LIVEmonthly(data):
                 war_count = 1
                 scale_points = 1
 
-    return database.save_warInfo(data, scale_points)
+    return database.save_warInfo(data, scale_points, save)
 
 def data_from_monthly():
     return database.monthly_cache()
