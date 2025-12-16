@@ -67,16 +67,16 @@ def fetch_from_player(tag):
         player[tag] = {
                     "name": name,
                     "townhall": townhall,
-                    "sum_stars": "0",
-                    "avrg_stars": "0",
-                    "avrg_attacks_used": "0",
-                    "sum_attacks_used": "0",
-                    "sum_points": "0",
-                    "wars_attended": "0",
+                    "sum_stars": 0,
+                    "avrg_stars": 0.0,
+                    "avrg_attacks_used": 0.0,
+                    "sum_attacks_used": 0,
+                    "sum_points": 0.0,
+                    "wars_attended": 0,
                     "player_rating": rating,
-                    "possible_attacks": "0",
-                    "avrg_points": "0",
-                    "precent_attacks": "0"
+                    "possible_attacks": 0,
+                    "avrg_points": 0.0,
+                    "precent_attacks": 0.0
                     }
         
         return player
@@ -104,7 +104,7 @@ def predictions():
             continue
 
         player = fetch_from_player(tag)
-        avrg_stars = player["avrg_stars"]
+        avrg_stars = player[tag]["avrg_stars"]
 
         if avrg_stars == None:
             avrg_stars = 2.0
