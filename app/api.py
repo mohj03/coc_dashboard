@@ -112,7 +112,7 @@ def predictions():
         c.execute("""
             SELECT *
             FROM player_war_log
-            WHERE tag = ?
+            WHERE player_tag = ?
             ORDER BY rowid DESC
             LIMIT 25
         """, (tag,))
