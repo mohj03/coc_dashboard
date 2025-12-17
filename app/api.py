@@ -97,26 +97,113 @@ def get_player(tag: str):
 def predictions():
     with open(CACHE["live_war"], "r", encoding="utf-8") as f:
         data = json.load(f)
+
+    war_type = data["war_info"]["warType"]
+    player_info = {}
+
+    DB_PATH = DB["cw"]
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
     
-    star_mean = []
     for tag in data:
         if tag == "war_info":
             continue
 
-        player = fetch_from_player(tag)
-        avrg_stars = player[tag]["avrg_stars"]
+        c.execute("""
+            SELECT *
+            FROM player_war_log
+            WHERE tag = ?
+            ORDER BY rowid DESC
+            LIMIT 25
+        """, (tag,))
 
-        if avrg_stars == None:
-            avrg_stars = 2.0
+        rows = c.fetchall()[::-1]
+        n = len(rows)
+        if n > 0:
 
-        star_mean.append(avrg_stars)
-    
-    if not star_mean:
-        return None
+            if n > 5:
+                a = 2 / (5 + 1)
+                if rows[0][3] > 0:
+                    ema0 = rows[0][4] / rows[0][3]
 
-    prediction = sum(star_mean)
-    
-    return f"{prediction} - {prediction + 3}"
+                else: 
+                    ema0 = 0
+
+                for i in range(1, n):
+                    if rows[i][3] == 0:
+                        continue
+
+                    ema = a * (rows[i][4] / rows[i][3]) + (1-a) * ema0
+                    ema0 = ema
+                
+                avrg_stars = ema0
+            
+            elif n > 0:
+
+                sum_stars = 0
+                skip = 0
+                for i in range(n):
+                    if rows[i][3] == 0:
+                        skip += 1
+                        continue
+
+                    sum_stars +=  rows[i][4] / rows[i][3]
+
+                den = n - skip
+                avrg_stars = sum_stars / den if den > 0 else 0.0
+
+            th_opp = 0
+            skip = 0
+            for i in range(n):
+                if rows[i][8] == 0:
+                    skip += 1
+                    continue
+                th_opp += rows[i][8]
+
+            den = (n - skip)
+            th_opp_avrg = th_opp / den if den > 0 else 0.0
+
+
+            last5_attacks = rows[-5:]
+            nl = len(last5_attacks)
+            attacks = 0
+            for i in range(nl):
+                attacks += last5_attacks[i][3]
+            
+            avrg_attacks = attacks / (nl * 2)
+
+        else:
+
+            player = fetch_from_player(tag)
+            th = player[tag]["townhall"]
+
+            c.execute("""
+            SELECT *
+            FROM player_war_log
+            WHERE th_level = ?
+                  AND attack_used > 0
+            ORDER BY rowid DESC
+            LIMIT 30
+            """, (th,))
+            rows = c.fetchall()
+            n = len(rows)
+            sum_stars = 0
+            for i in range(n):
+                sum_stars += (rows[i][4] / rows[i][3])
+            
+            avrg_stars = sum_stars / n if n > 0 else 0.0
+            th_opp_avrg = 1
+            avrg_attacks = 0.5
+
+        player_info[tag] = {
+            "avrg_stars": avrg_stars,
+            "th_opp_avrg": th_opp_avrg,
+            "avrg_attacks": avrg_attacks
+        }
+
+    conn.close()
+
+    return player_info
 
 
 @app.get("/clash/clan-members")
