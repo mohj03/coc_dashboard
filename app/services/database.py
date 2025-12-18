@@ -49,6 +49,7 @@ c.execute("""CREATE TABLE IF NOT EXISTS player_war_log (
         unfiltered_points REAL DEFAULT 0.0,
         destruction_percent REAL DEFAULT 0.0,
         opponent_avrg_th REAL DEFAULT 0.0,
+        opponent_avrg_mapp REAL DEFAULT 0.0,
         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )
          """)
@@ -138,6 +139,7 @@ def save_warInfo(data, scale, save=False):
 
         timestamp = data.get("war_info", {}).get("endTime", "")
         war_type = data.get("war_info", {}).get("warType", "")
+        opp_info = data.get("war_info", {}).get("oppInfo", "")
         try:
             if data["war_info"]["state"] == "warEnded" or save:
                 c.execute("SELECT endTime FROM cw_log ORDER BY endTime DESC LIMIT 17")
@@ -161,10 +163,14 @@ def save_warInfo(data, scale, save=False):
 
                     opp_th = 0.0
                     avrg_opp_th = 0.0
+                    opp_map_pos = 0.0
+                    avrg_opp_map_pos = 0.0
                     if player["attacks"]:
                         for opp in player["attacks"]:
                             opp_th += opp["defenderTownhall"]
-                            
+                            opp_map_pos += opp_info[opp["defenderTag"]]["mapPosition"]
+
+                        avrg_opp_map_pos = opp_map_pos / len(player["attacks"])
                         avrg_opp_th = opp_th / len(player["attacks"])
                     
                     
@@ -322,8 +328,8 @@ def save_warInfo(data, scale, save=False):
 
                     c.execute("""
                         INSERT INTO player_war_log 
-                            (player_tag, th_level, attack_used, stars, unfiltered_points, destruction_percent, opponent_avrg_th)
-                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                            (player_tag, th_level, attack_used, stars, unfiltered_points, destruction_percent, opponent_avrg_th, opponent_avrg_mapp)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     """, (
                         tag,
                         th,
@@ -332,6 +338,7 @@ def save_warInfo(data, scale, save=False):
                         unfiltered_points,
                         total_destruction,
                         avrg_opp_th,
+                        avrg_opp_map_pos,
                     ))
             
             conn.commit()

@@ -119,6 +119,7 @@ def predictions():
 
         rows = c.fetchall()[::-1]
         n = len(rows)
+        th = rows[0][2]
         if n > 0:
 
             if n > 5:
@@ -161,7 +162,7 @@ def predictions():
                 th_opp += rows[i][8]
 
             den = (n - skip)
-            th_opp_avrg = th_opp / den if den > 0 else 0.0
+            th_opp_avrg = th_opp / den if den > 0 else 0.5
 
 
             last5_attacks = rows[-5:]
@@ -191,16 +192,16 @@ def predictions():
             for i in range(n):
                 sum_stars += (rows[i][4] / rows[i][3])
             
-            avrg_stars = sum_stars / n if n > 0 else 0.0
-            th_opp_avrg = 1
+            avrg_stars = sum_stars / n if n > 0 else 2.0
+            th_opp_avrg = 0.7
             avrg_attacks = 0.5
 
         player_info[tag] = {
             "avrg_stars": avrg_stars,
             "th_opp_avrg": th_opp_avrg,
-            "avrg_attacks": avrg_attacks
+            "avrg_attacks": avrg_attacks,
+            "th": th
         }
-
     conn.close()
 
     return player_info

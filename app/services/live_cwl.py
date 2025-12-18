@@ -39,6 +39,13 @@ class LiveCWL():
         else:
             clan_members = self.data["opponent"]["members"]
             opponent_members = self.data["clan"]["members"]
+    
+        opp_info = {}
+        for member in opponent_members:
+             opp_info[member["tag"]] = {
+                  "townhallLevel":  member["townhallLevel"],
+                  "mapPosition": member["mapPosition"]
+             }
 
         result = {}
         result["war_info"] = {"endTime": self.endTime,
@@ -57,6 +64,7 @@ class LiveCWL():
                             "maxPoints": round(100 * self.scale, 1),
                             "scale": self.scale,
                             "war_count": self.war_count,
+                            "oppInfo": opp_info,
                             "maxPoints_info": "Regnes slik at maks poeng fra forrige måndens clan wars er 3 ekstra stjerner i clan war league sammendraget"
                             }
         
