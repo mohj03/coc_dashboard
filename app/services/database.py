@@ -50,6 +50,7 @@ c.execute("""CREATE TABLE IF NOT EXISTS player_war_log (
         destruction_percent REAL DEFAULT 0.0,
         opponent_avrg_th REAL DEFAULT 0.0,
         opponent_avrg_mapp REAL DEFAULT 0.0,
+        war_type INTEGER DEFAULT 0,
         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )
          """)
@@ -328,8 +329,8 @@ def save_warInfo(data, scale, save=False):
 
                     c.execute("""
                         INSERT INTO player_war_log 
-                            (player_tag, th_level, attack_used, stars, unfiltered_points, destruction_percent, opponent_avrg_th, opponent_avrg_mapp)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                            (player_tag, th_level, attack_used, stars, unfiltered_points, destruction_percent, opponent_avrg_th, opponent_avrg_mapp, war_type)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """, (
                         tag,
                         th,
@@ -339,6 +340,7 @@ def save_warInfo(data, scale, save=False):
                         total_destruction,
                         avrg_opp_th,
                         avrg_opp_map_pos,
+                        war_type,
                     ))
             
             conn.commit()

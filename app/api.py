@@ -122,7 +122,8 @@ def predictions():
         if n > 0:
             th = rows[0][2]
             if n > 5:
-                a = 2 / (5 + 1)
+                N = 5
+                a = 2 / (N + 1)
                 if rows[0][3] > 0:
                     ema0 = rows[0][4] / rows[0][3]
 
