@@ -10,8 +10,8 @@ def cw_loop():
         "theme": "noWar",
         "warInfo": None
     }
-    backup_root = BACKUP["cw"] / "20251015T183827.000Z.json"
-    backup_insert(backup_root)
+    #backup_root = BACKUP["cw"] / "20251015T183827.000Z.json"
+    #backup_insert(backup_root)
     while True:
 
         count = 60
