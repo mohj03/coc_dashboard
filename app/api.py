@@ -119,9 +119,8 @@ def predictions():
 
         rows = c.fetchall()[::-1]
         n = len(rows)
-        th = rows[0][2]
         if n > 0:
-
+            th = rows[0][2]
             if n > 5:
                 a = 2 / (5 + 1)
                 if rows[0][3] > 0:
